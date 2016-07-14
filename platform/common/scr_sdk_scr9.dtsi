@@ -1,0 +1,533 @@
+/*
+ * Copyright (C) 2016, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+#include "platform_config.h"
+
+#ifndef PLF_RISCV_ISA
+#if PLF_RVA22_SUPPORT
+#define PLF_RISCV_ISA "rv64imafdchv"
+#else
+#define PLF_RISCV_ISA "rv64imafdc_sscofpmf_zba_zbb_zbc_zbs"
+#endif // PLF_RVA22_SUPPORT
+#endif // PLF_RISCV_ISA
+
+#if PLF_RVA22_SUPPORT
+#define MMU_TYPE "riscv,sv57"
+#define RISCV_CBOM_BLOCK_SIZE 64
+#else
+#define MMU_TYPE "riscv,sv39"
+#define RISCV_CBOM_BLOCK_SIZE 32
+#endif
+
+/ {
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        timebase-frequency = <timebase_freq:1000000>;
+
+        cpu0: cpu@0 {
+            device_type = cpu0_devtype:"cpu";
+            reg = <cpu0id: 0>;
+            status = cpu0_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu0_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu0_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu0_freq:0>;
+
+            CPU0_intc: interrupt-controller0 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+#if PLF_SMP_SUPPORT
+        cpu1: cpu@1 {
+            device_type = cpu1_devtype:"cpu";
+            reg = <cpu1id: 1>;
+            status = cpu1_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu1_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu1_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu1_freq:0>;
+
+            CPU1_intc: interrupt-controller1 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu2: cpu@2 {
+            device_type = cpu2_devtype:"cpu";
+            reg = <cpu2id: 2>;
+            status = cpu2_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu2_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu2_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu2_freq:0>;
+
+            CPU2_intc: interrupt-controller2 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu3: cpu@3 {
+            device_type = cpu3_devtype:"cpu";
+            reg = <cpu3id: 3>;
+            status = cpu3_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu3_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu3_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu3_freq:0>;
+
+            CPU3_intc: interrupt-controller3 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu4: cpu@4 {
+            device_type = cpu4_devtype:"cpu";
+            reg = <cpu4id: 4>;
+            status = cpu4_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu4_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu4_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu4_freq:0>;
+
+            CPU4_intc: interrupt-controller4 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu5: cpu@5 {
+            device_type = cpu5_devtype:"cpu";
+            reg = <cpu5id: 5>;
+            status = cpu5_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu5_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu5_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu5_freq:0>;
+
+            CPU5_intc: interrupt-controller5 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu6: cpu@6 {
+            device_type = cpu6_devtype:"cpu";
+            reg = <cpu6id: 6>;
+            status = cpu6_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu6_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu6_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu6_freq:0>;
+
+            CPU6_intc: interrupt-controller6 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu7: cpu@7 {
+            device_type = cpu7_devtype:"cpu";
+            reg = <cpu7id: 7>;
+            status = cpu7_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu7_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu7_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu7_freq:0>;
+
+            CPU7_intc: interrupt-controller7 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+
+#if PLF_SMP_HART_NUM > 8
+        cpu8: cpu@8 {
+            device_type = cpu8_devtype:"cpu";
+            reg = <cpu8id: 8>;
+            status = cpu8_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu8_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu8_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu8_freq:0>;
+
+            CPU8_intc: interrupt-controller8 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu9: cpu@9 {
+            device_type = cpu9_devtype:"cpu";
+            reg = <cpu9id: 9>;
+            status = cpu9_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu9_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu9_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu9_freq:0>;
+
+            CPU9_intc: interrupt-controller9 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu10: cpu@10 {
+            device_type = cpu10_devtype:"cpu";
+            reg = <cpu10id: 10>;
+            status = cpu10_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu10_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu10_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu10_freq:0>;
+
+            CPU10_intc: interrupt-controller10 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu11: cpu@11 {
+            device_type = cpu11_devtype:"cpu";
+            reg = <cpu11id: 11>;
+            status = cpu11_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu11_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu11_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu11_freq:0>;
+
+            CPU11_intc: interrupt-controller11 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu12: cpu@12 {
+            device_type = cpu12_devtype:"cpu";
+            reg = <cpu12id: 12>;
+            status = cpu12_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu12_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu12_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu12_freq:0>;
+
+            CPU12_intc: interrupt-controller12 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu13: cpu@13 {
+            device_type = cpu13_devtype:"cpu";
+            reg = <cpu13id: 13>;
+            status = cpu13_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu13_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu13_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu13_freq:0>;
+
+            CPU13_intc: interrupt-controller13 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu14: cpu@14 {
+            device_type = cpu14_devtype:"cpu";
+            reg = <cpu14id: 14>;
+            status = cpu14_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu14_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu14_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu14_freq:0>;
+
+            CPU14_intc: interrupt-controller14 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu15: cpu@15 {
+            device_type = cpu15_devtype:"cpu";
+            reg = <cpu15id: 15>;
+            status = cpu15_status:"fail";
+            compatible = "syntacore,scr9","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+#if PLF_RVA22_SUPPORT
+            riscv,isa-base = "rv64i";
+            riscv,isa-extensions = "i", "m", "a", "c", "f", "d", "h", "v",
+                                   "zba", "zbb", "zbc", "zbs",
+                                   "zicntr", "zicsr", "zifencei", "zihpm",
+                                   "zihintpause", "zicbom", "zicboz",
+                                   "svnapot", "svpbmt", "svinval", "smstateen",
+#if PLF_AIA_SUPPORT
+                                   "smaia", "ssaia",
+#endif
+                                   "sscofpmf", "sstc";
+            riscv,cboz-block-size = <cpu15_l2_bsz: 64>;
+#endif // PLF_RVA22_SUPPORT
+            riscv,cbom-block-size = <cpu15_l2_bs: RISCV_CBOM_BLOCK_SIZE>;
+            clock-frequency = <cpu15_freq:0>;
+
+            CPU15_intc: interrupt-controller15 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+#endif // PLF_SMP_HART_NUM > 8
+#endif // PLF_SMP_SUPPORT
+
+    };
+};

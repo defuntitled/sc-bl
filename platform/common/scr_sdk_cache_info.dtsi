@@ -1,0 +1,154 @@
+/*
+ * Copyright (C) 2024, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+#include "platform_config.h"
+
+#if PLF_SUPPORT_CACHE_INFO
+/ {
+	cpus {
+
+#if PLF_L3CTL_BASE
+#define L2_NEXT_LEVEL_CACHE next-level-cache = <&L3>;
+
+	L3: l3-cache {
+		compatible = "cache";
+		cache-unified;
+		cache-size = <shared_l3_sz: 0x2000000>; // 32 MB
+		cache-sets = <shared_l3_sets: 0x8000>;
+		cache-block-size = <shared_l3_block_sz: 64>;
+		cache-level = <3>;
+	};
+
+#else /* PLF_L3CTL_BASE */
+#define L2_NEXT_LEVEL_CACHE
+#endif /* PLF_L3CTL_BASE */
+
+
+#if PLF_L2CTL_BASE
+#if PLF_CACHE_L2_DEDICATED
+
+#define L2_CACHE_NODE(n)                                     \
+	next-level-cache = <&L2_##n>;                            \
+	L2_##n: l2-cache {                                   \
+		compatible = "cache";                                \
+		cache-unified;                                       \
+		cache-size = <l2_sz_##n: 0x80000>;                   \
+		cache-sets = <l2_sets_##n: 2048>;                    \
+		cache-block-size = <l2_block_sz_##n: 32>;            \
+		cache-level = <2>;                                   \
+		\
+		L2_NEXT_LEVEL_CACHE                                  \
+	};
+
+#else /* PLF_CACHE_L2_DEDICATED */
+
+	L2: l2-cache {
+		compatible = "cache";
+		cache-unified;
+		cache-size = <shared_l2_sz: 0x80000>; // 512 KB
+		cache-sets = <shared_l2_sets: 2048>;
+		cache-block-size = <shared_l2_block_sz: 32>;
+		cache-level = <2>;
+	};
+
+#define L2_CACHE_NODE(n) \
+	next-level-cache = <&L2>;
+
+#endif /* PLF_CACHE_L2_DEDICATED */
+#else /* PLF_L2CTL_BASE */
+	#define L2_CACHE_NODE(n)
+#endif /* PLF_L2CTL_BASE */
+
+
+#define L1_CACHE_NODE(n)                           \
+	d-cache-block-size = <l1d_block_sz_##n: 16>;   \
+	d-cache-sets = <l1d_sets_##n: 512>;            \
+	d-cache-size = <l1d_sz_##n: 32768>;            \
+	i-cache-block-size = <l1i_block_sz_##n: 16>;   \
+	i-cache-sets = <l1i_sets_##n: 512>;            \
+	i-cache-size = <l1i_sz_##n: 32768>;            \
+	\
+	L2_CACHE_NODE(n)
+
+	cpu@0 {
+		L1_CACHE_NODE(0)
+	};
+
+#if PLF_SMP_SUPPORT
+	cpu@1 {
+		L1_CACHE_NODE(1)
+	};
+
+	cpu@2 {
+		L1_CACHE_NODE(2)
+	};
+
+	cpu@3 {
+		L1_CACHE_NODE(3)
+	};
+
+	cpu@4 {
+		L1_CACHE_NODE(4)
+	};
+
+	cpu@5 {
+		L1_CACHE_NODE(5)
+	};
+
+	cpu@6 {
+		L1_CACHE_NODE(6)
+	};
+
+	cpu@7 {
+		L1_CACHE_NODE(7)
+	};
+
+#if PLF_SMP_HART_NUM > 8
+	cpu@8 {
+		L1_CACHE_NODE(8)
+	};
+
+	cpu@9 {
+		L1_CACHE_NODE(9)
+	};
+
+
+	cpu@10 {
+		L1_CACHE_NODE(10)
+	};
+
+
+	cpu@11 {
+		L1_CACHE_NODE(11)
+	};
+
+
+	cpu@12 {
+		L1_CACHE_NODE(12)
+	};
+
+
+	cpu@13 {
+		L1_CACHE_NODE(13)
+	};
+
+
+	cpu@14 {
+		L1_CACHE_NODE(14)
+	};
+
+
+	cpu@15 {
+		L1_CACHE_NODE(15)
+	};
+#endif // PLF_SMP_HART_NUM > 8
+
+
+#endif /* PLF_SMP_SUPPORT */
+
+	};
+};
+
+#endif

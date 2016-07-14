@@ -1,0 +1,28 @@
+/*
+ * Copyright (C) 2023, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+/dts-v1/;
+
+#include "scr_sdk_vcu118.dtsi"
+#include "scr_sdk_scr6.dtsi"
+#include "scr_sdk_riscv_plic.dtsi"
+#include "scr_sdk_cache_info.dtsi"
+
+
+/ {
+    model = "Syntacore SCR6 SDK board";
+    compatible = "syntacore,scr6_sdk";
+
+    firmware {
+        syntacore,scbl = dtb_fw_scbl_rev:"YYYY-MM-DD version string xxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx";
+        syntacore,bldid = dtb_fw_bldid:"0000000000000000";
+        syntacore,impid = dtb_fw_impid:"0000000000000000";
+        syntacore,platform = dtb_fw_platform:"xxxxxxxxxxxxxxxx";
+    };
+
+    chosen {
+        bootargs = "earlycon=ns16550a,mmio32,0xffffffff010000 console=ttyS0,115200";
+    };
+};

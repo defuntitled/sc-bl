@@ -1,0 +1,213 @@
+/*
+ * Copyright (C) 2016, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+#include "platform_config.h"
+
+/ {
+    model = "Syntacore SCR SDK board";
+    compatible = "syntacore,scr_sdk";
+    #address-cells = <2>;
+    #size-cells = <2>;
+
+    aliases {
+        ethernet = &axi_ethernet_0;
+    };
+
+    clk_bus_0: clkc {
+        #clock-cells = <0>;
+        clock-frequency = <dev0_freq:0>;
+        clock-output-names = "clk_bus_0";
+        compatible = "fixed-clock";
+    };
+
+    memory@0 {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        device_type = "memory";
+        reg = <dtb_mem_base:0x0 0x0 dtb_mem_size:0x0 0x20000000>;
+    };
+
+#if !PLF_DMA_COHERENT
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        // global region for dma allocations
+        linux,dma@ff000000 {
+            compatible = "shared-dma-pool";
+            reg = <dtb_dma_mem_base:0 0 dtb_dma_mem_size:0 0>;
+            linux,dma-default;
+            no-map;
+        };
+    };
+#endif
+
+#if PLF_MMODE_ONLY == 1
+    mtimer: timer@fffffff0040000 {
+        compatible = "scr,mtimer0";
+        reg = <0xffffff 0xf0040000 0x0 0x1000>;
+        interrupts-extended = <&CPU0_intc 7>;
+        clock-frequency = <mtimer_freq:0>;
+#if PLF_RTC_SRC_EXTERNAL == 1
+        clock-external;
+#endif
+    };
+
+    iccm {
+        compatible = "scr,iccm-csr";
+    };
+#endif
+
+    scr_sdk_soc: soc {
+        device_type = "soc";
+        ranges;
+        #address-cells = <2>;
+        #size-cells = <2>;
+        compatible = "simple-bus";
+        bus-frequency = <dev1_freq:0>;
+#if PLF_DMA_COHERENT
+        dma-coherent;
+#else
+        dma-noncoherent;
+#endif
+
+#if PLF_PMU_SUPPORT
+        pmu {
+            compatible = "riscv,pmu";
+            interrupts-extended =
+                <&CPU0_intc 13>
+#if PLF_SMP_SUPPORT
+                               ,
+                <&CPU1_intc 13>,
+                <&CPU2_intc 13>,
+                <&CPU3_intc 13>,
+                <&CPU4_intc 13>,
+                <&CPU5_intc 13>,
+                <&CPU6_intc 13>,
+                <&CPU7_intc 13>
+#endif
+                               ;
+        };
+#endif
+
+        pb_cpu_to_io: bridge@ffffffff000000 {
+            compatible = "simple-bus";
+            reg = <0xffffff 0xff000000 0x0 0x00800000>;
+            #address-cells = <2>;
+            #size-cells = <2>;
+            ranges = <0x0 0x0 0xffffff 0xff000000 0x0 0x00800000>;
+
+            uart: serial@10000 {
+                compatible = "ns16550a";
+                reg = <0x0 0x10000 0x0 0x00000100>;
+                reg-io-width = <4>;
+                reg-shift = <2>;
+#if PLF_AIA_SUPPORT
+                interrupt-parent = <&aplic_s>;
+#else
+                interrupt-parent = <&plic>;
+#endif // PLF_AIA_SUPPORT
+                interrupts = <1 4>;
+                current-speed = <115200>;
+                clock-frequency = <dev2_freq:0>;
+            };
+
+#ifdef PLF_XGMAC_BASE
+            xgmac: ethernet@20000 {
+                compatible = "calxeda,hb-xgmac";
+                reg = <0x0 0x20000 0x0 0x1000>;
+                interrupt-parent = <&plic>;
+                interrupts = <6 4>, <7 4>, <8 4>;
+            };
+#endif // PLF_XGMAC_BASE
+
+            spi0: spi@30000 {
+                compatible = "xlnx,xps-spi-2.00.a";
+                reg = <0x0 0x30000 0x0 0x10000>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+                xlnx,num-ss-bits = <0x1>;
+                xlnx,num-transfer-bits = <8>;
+                fifo-size = <16>;  // U-Boot has no fifo autodetect
+
+                flash0: flash@0 {
+                    compatible = "jedec,spi-nor";
+                    spi-max-frequency = <25000000>;
+                    reg = <0>;
+
+                    partitions {
+                        compatible = "fixed-partitions";
+                        #address-cells = <1>;
+                        #size-cells = <1>;
+
+                        partition@4000000 {
+                            label = "Linux";
+                            reg = <0x4000000 0x4000000>; // 64MB partition for Linux
+                        };
+                    };
+                };
+            };
+
+            axi_ethernet_0: ethernet@40000 {
+                axistream-connected = <&axi_ethernet_0_dma>;
+                axistream-control-connected = <&axi_ethernet_0_dma>;
+
+                compatible = "xlnx,axi-ethernet-1.00.a";
+                device_type = "network";
+                local-mac-address = [00 0a 35 04 D0 91];
+
+                reg = <0 0x40000 0 0x40000>;
+
+                phy-handle = <&phy3>;
+                pcs-handle = <&phy4>;
+
+                phy-mode = "sgmii";
+
+                xlnx,rxcsum = <0x2>;
+                xlnx,rxmem = <0x1000>;
+                xlnx,txcsum = <0x2>;
+
+                managed = "in-band-status";
+
+                mdio {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+
+                    phy3: phy@3 {
+                        compatible = "ethernet-phy-ieee802.3-c22";
+                        reg = <3>;
+                        ti,fifo-depth = <0x3>;
+                        ti,dp83867-rxctrl-strap-quirk = <1>;
+                        ti,sgmii-ref-clock-output-enable = <1>;
+                    };
+
+                    phy4: phy@4 {
+                        compatible = "ethernet-phy-id0174.0c00";
+                        reg = <4>;
+                    };
+                };
+            };
+
+            axi_ethernet_0_dma: dma@80000 {
+                #dma-cells = <1>;
+                axistream-connected = <&axi_ethernet_0>;
+                axistream-control-connected = <&axi_ethernet_0>;
+                clock-frequency = <dev3_freq:0>;
+                clock-names = "s_axi_lite_aclk";
+                clocks = <&clk_bus_0>;
+                compatible = "xlnx,eth-dma";
+#if PLF_AIA_SUPPORT
+                interrupt-parent = <&aplic_s>;
+#else
+                interrupt-parent = <&plic>;
+#endif // PLF_AIA_SUPPORT
+                interrupts = <3 4>,<2 4>;
+                reg = <0 0x80000 0 0x10000>;
+                xlnx,include-dre ;
+            };
+        };
+    };
+};

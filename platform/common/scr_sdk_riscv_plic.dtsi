@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 2016, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+#include "platform_config.h"
+
+&scr_sdk_soc {
+    #address-cells = <2>;
+    #size-cells = <2>;
+
+    plic: interrupt-controller@fffffffe000000 {
+        #interrupt-cells = <2>;
+        compatible = "syntacore,plic";
+        interrupt-controller;
+
+        interrupts-extended = <
+            &CPU0_intc 11 &CPU0_intc 9
+#if PLF_SMP_SUPPORT
+            &CPU1_intc 11 &CPU1_intc 9
+            &CPU2_intc 11 &CPU2_intc 9
+            &CPU3_intc 11 &CPU3_intc 9
+            &CPU4_intc 11 &CPU4_intc 9
+            &CPU5_intc 11 &CPU5_intc 9
+            &CPU6_intc 11 &CPU6_intc 9
+            &CPU7_intc 11 &CPU7_intc 9
+#endif // PLF_SMP_SUPPORT
+        >;
+
+        reg = <0xffffff 0xfe000000 0x0 0x300000>;
+        reg-names = "control";
+        riscv,max-priority = <7>;
+        riscv,ndev = <16>;
+    };
+};

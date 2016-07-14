@@ -1,0 +1,184 @@
+/*
+ * Copyright (C) 2016, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+#include "platform_config.h"
+
+#if __riscv_xlen > 32
+#define MMU_TYPE "riscv,sv39"
+#else // __riscv_xlen > 32
+#define MMU_TYPE "riscv,sv32"
+#endif // __riscv_xlen > 32
+
+#ifndef PLF_RISCV_ISA
+#if __riscv_xlen > 32
+#define PLF_RISCV_ISA "rv64imafdc"
+#else // __riscv_xlen > 32
+#define PLF_RISCV_ISA "rv32imafdc"
+#endif // __riscv_xlen > 32
+#endif // PLF_RISCV_ISA
+
+/ {
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        timebase-frequency = <timebase_freq:1000000>;
+
+        cpu0: cpu@0 {
+            device_type = cpu0_devtype:"cpu";
+            reg = <cpu0id:0>;
+            status = cpu0_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu0_freq:0>;
+
+            riscv,cbom-block-size = <cpu0_l2_bs: 32>;
+
+            CPU0_intc: interrupt-controller0 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+#if PLF_SMP_SUPPORT
+        cpu1: cpu@1 {
+            device_type = cpu1_devtype:"cpu";
+            reg = <cpu1id:1>;
+            status = cpu1_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu1_freq:0>;
+
+            riscv,cbom-block-size = <cpu1_l2_bs: 32>;
+
+            CPU1_intc: interrupt-controller1 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu2: cpu@2 {
+            device_type = cpu2_devtype:"cpu";
+            reg = <cpu2id:2>;
+            status = cpu2_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu2_freq:0>;
+
+            riscv,cbom-block-size = <cpu2_l2_bs: 32>;
+
+            CPU2_intc: interrupt-controller2 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu3: cpu@3 {
+            device_type = cpu3_devtype:"cpu";
+            reg = <cpu3id:3>;
+            status = cpu3_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu3_freq:0>;
+
+            riscv,cbom-block-size = <cpu3_l2_bs: 32>;
+
+            CPU3_intc: interrupt-controller3 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu4: cpu@4 {
+            device_type = cpu4_devtype:"cpu";
+            reg = <cpu4id:4>;
+            status = cpu4_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu4_freq:0>;
+
+            riscv,cbom-block-size = <cpu4_l2_bs: 32>;
+
+            CPU4_intc: interrupt-controller4 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu5: cpu@5 {
+            device_type = cpu5_devtype:"cpu";
+            reg = <cpu5id:5>;
+            status = cpu5_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu5_freq:0>;
+
+            riscv,cbom-block-size = <cpu5_l2_bs: 32>;
+
+            CPU5_intc: interrupt-controller5 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu6: cpu@6 {
+            device_type = cpu6_devtype:"cpu";
+            reg = <cpu6id:6>;
+            status = cpu6_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu6_freq:0>;
+
+            riscv,cbom-block-size = <cpu6_l2_bs: 32>;
+
+            CPU6_intc: interrupt-controller6 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu7: cpu@7 {
+            device_type = cpu7_devtype:"cpu";
+            reg = <cpu7id:7>;
+            status = cpu7_status:"fail";
+            compatible = "syntacore,scr5","riscv";
+            riscv,isa = PLF_RISCV_ISA;
+            mmu-type = MMU_TYPE;
+            clock-frequency = <cpu7_freq:0>;
+
+            riscv,cbom-block-size = <cpu7_l2_bs: 32>;
+
+            CPU7_intc: interrupt-controller7 {
+				#address-cells = <0>;
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+#endif // PLF_SMP_SUPPORT
+
+    };
+};

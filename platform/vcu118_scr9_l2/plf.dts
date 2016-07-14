@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2016, Syntacore Ltd.
+ * All Rights Reserved.
+ */
+
+/dts-v1/;
+
+#include "scr_sdk_vcu118.dtsi"
+#include "scr_sdk_scr9.dtsi"
+#if PLF_AIA_SUPPORT
+#include "scr_sdk_riscv_aia.dtsi"
+#else
+#include "scr_sdk_riscv_plic.dtsi"
+#endif
+#include "scr_sdk_cache_info.dtsi"
+
+
+/ {
+    model = "Syntacore SCR9 SDK board";
+    compatible = "syntacore,scr9_sdk";
+
+    firmware {
+        syntacore,scbl = dtb_fw_scbl_rev:"YYYY-MM-DD version string xxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx";
+        syntacore,bldid = dtb_fw_bldid:"0000000000000000";
+        syntacore,impid = dtb_fw_impid:"0000000000000000";
+        syntacore,platform = dtb_fw_platform:"xxxxxxxxxxxxxxxx";
+    };
+
+    chosen {
+#if PLF_MMODE_ONLY == 0
+        bootargs = "earlycon=sbi console=ttyS0,115200";
+#else
+        bootargs = "earlycon=ns16550a,mmio32,0xffffffff010000 console=ttyS0,115200";
+#endif
+    };
+};
