@@ -50,7 +50,6 @@ Supported target platforms
 | vcu118_scr6           | AMD/Xilinx VCU118     |            | internal (cluster) | SCR6  |       | L1, L2     | 4G   | 64K   | L2      | MPU            | PLIC             | rv64 |                                |
 |                       |                       |            |                    |       |       |            |      |       |         |                |                  |      |                                |
 | vcu118_scr7_l2        | AMD/Xilinx VCU118     |            | internal (cluster) | SCR7  |       | L1, L2     | 4G   | 64K   | L2      | PMP, MMU       | PLIC, PMU, PCIE  | rv64 |                                |
-| vcu118_scr7_l2_mpu    | AMD/Xilinx VCU118     |            | internal (cluster) | SCR7  |       | L1, L2     | 4G   | 64K   | L2      | MPU, MMU       | PLIC             | rv64 |                                |
 |                       |                       |            |                    |       |       |            |      |       |         |                |                  |      |                                |
 | vcu118_scr9_l2        | AMD/Xilinx VCU118     |            | internal (cluster) | SCR9  |       | L1, L2     | 4G   | 64K   | L2      | PMP, MMU       | PLIC, PMU        | rv64 |                                |
 |                       |                       |            |                    |       |       |            |      |       |         |                |                  |      |                                |
