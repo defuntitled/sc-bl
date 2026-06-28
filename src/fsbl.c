@@ -963,17 +963,19 @@ static void cmd_flip_dbg(void *arg)
 
 #ifdef PLF_HWCNT_DUMP
 /* race-free read of a 64-bit counter split across lo/hi CSRs (RV32) */
-#define read_counter64(lo, hi) ({                       \
+#define read_counter64(dst, lo, hi) do{			\
     uint32_t _h, _l, _h2;                               \
     do { _h = read_csr(hi); _l = read_csr(lo);          \
          _h2 = read_csr(hi); } while (_h != _h2);       \
-    ((uint64_t)_h << 32) | _l; })
+    (dst) = ((uint64_t)_h << 32) | _l; }while(0)
 
 static void cmd_dump_counters(void *arg)
 {
-    uint64_t cyc  = read_counter64(mcycle,   mcycleh);
-    uint64_t inst = read_counter64(minstret, minstreth);
-    uint64_t tim  = read_counter64(time,     timeh);
+    uint64_t cyc, inst, tim;
+
+    read_counter64(cyc,  mcycle,   mcycleh);
+    read_counter64(inst, minstret, minstreth);
+    read_counter64(tim,  time,     timeh);
 
     uart_puts("HW counters:\n");
     uart_puts("  cycle:   "); uart_puthex64(cyc);  uart_putc('\n');
